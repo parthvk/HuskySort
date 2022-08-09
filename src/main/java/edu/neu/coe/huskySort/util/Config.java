@@ -219,6 +219,22 @@ public class Config {
         return load(null);
     }
 
+    public static Config setupConfig(final String instrumenting, final String seed, final String inversions, final String cutoff, final String interimInversions) {
+        final Ini ini = new Ini();
+        final String sInstrumenting = INSTRUMENTING;
+        ini.put(Config.HELPER, Config.INSTRUMENT, instrumenting);
+        ini.put(Config.HELPER, SEED, seed);
+        ini.put(Config.HELPER, CUTOFF, cutoff);
+        ini.put(sInstrumenting, INVERSIONS, inversions);
+        ini.put(sInstrumenting, SWAPS, instrumenting);
+        ini.put(sInstrumenting, COMPARES, instrumenting);
+        ini.put(sInstrumenting, COPIES, instrumenting);
+        ini.put(sInstrumenting, FIXES, instrumenting);
+        ini.put(sInstrumenting, HITS, instrumenting);
+        ini.put("huskyhelper", "countinteriminversions", interimInversions);
+        return new Config(ini);
+    }
+
     private static boolean unLogged(final String s) {
         final Boolean value = logged.get(s);
         if (value == null) {
@@ -234,4 +250,16 @@ public class Config {
     private static final Map<String, Boolean> logged = new HashMap<>();
 
     private final Ini ini;
+
+    public static final String TRUE = "true";
+    public static final String FALSE = "";
+    public static final String INSTRUMENTING = Instrumenter.INSTRUMENTING;
+    public static final String INVERSIONS = Instrumenter.INVERSIONS;
+    public static final String SEED = "seed";
+    public static final String CUTOFF = "cutoff";
+    public static final String SWAPS = Instrumenter.SWAPS;
+    public static final String COMPARES = Instrumenter.COMPARES;
+    public static final String COPIES = Instrumenter.COPIES;
+    public static final String FIXES = Instrumenter.FIXES;
+    public static final String HITS = Instrumenter.HITS;
 }

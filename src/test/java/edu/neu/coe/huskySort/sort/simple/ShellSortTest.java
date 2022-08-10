@@ -197,15 +197,6 @@ public class ShellSortTest {
         }
     }
 
-//    private void showInversions(ComparisonSortHelper<Integer> helper) {
-//        if (ComparisonSortHelper.class.isAssignableFrom(helper.getClass())) {
-//            ComparisonSortHelper<Integer> instrumentedHelper = (ComparisonSortHelper<Integer>) helper;
-//            System.out.println("inversions: " + instrumentedHelper.inversions(Instrumenter.getRandomArray()));
-//            System.out.println("compares: " + instrumentedHelper.getCompares());
-//            System.out.println("swaps: " + instrumentedHelper.getSwaps());
-//        }
-//    }
-
     @Test
     public void sortH1() {
         Integer[] xs = {15, 3, -1, 2, 4, 1, 0, 5, 8, 6, 1, 9, 17, 7, 11};

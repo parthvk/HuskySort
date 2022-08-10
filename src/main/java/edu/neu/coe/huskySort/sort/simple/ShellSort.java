@@ -247,8 +247,11 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
     }
 
     /**
-     * Method to run quicksort and get values for compares
+     * Method to run shellsort and get values for compares
      * and swaps for different array sizes using statpack.
+     * if num is 1, execute best case input and display results
+     * if num is 2, pass random array as input
+     * if num is 3, pass inverted array as input for worst case scenario
      */
     public static void main(String[] args) throws IOException {
 
@@ -256,14 +259,14 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
 
         Scanner scanner = new Scanner(System.in);
         int num = scanner.nextInt();
+
         if(num==1){
-            int k = 10;
-            System.out.println("test");
+            int k = 18;
             Integer[] sizeOfArray = new Integer[k];
             for(int i=0;i<k;i++){
                 sizeOfArray[i] = (int)Math.pow(2, 7+i);
             }
-            Integer cycles = 1;
+            int cycles = 1000;
             System.out.println("Averaging across " + cycles + " runs");
             for (Integer n : sizeOfArray) {
                 double swaps = 0.0;
@@ -284,7 +287,6 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
                     final StatPack statPack = (StatPack) privateMethodTester.invokePrivate("getStatPack");
                     swaps = swaps + statPack.getStatistics(Instrumenter.SWAPS).mean();
                     compares = compares + statPack.getStatistics(Instrumenter.COMPARES).mean();
-                    System.out.println(statPack);
                 }
 
                 double averageSwap = swaps / cycles;
@@ -294,13 +296,14 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
                 System.out.println( "Array Size: " + n + " Avg Swap: " + averageSwap + " Avg Compare: " + averageCompare + " Ratio: " + ratio);
             }
         }
+
         if(num==2){
             int k = 10;
             Integer[] sizeOfArray = new Integer[k];
             for(int i=0;i<k;i++){
                 sizeOfArray[i] = (int)Math.pow(2, 7+i);
             }
-            Integer cycles = 1;
+            int cycles = 1000;
             System.out.println("Averaging across " + cycles + " runs");
             for (Integer n : sizeOfArray) {
                 double swaps = 0.0;
@@ -318,7 +321,6 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
                     final StatPack statPack = (StatPack) privateMethodTester.invokePrivate("getStatPack");
                     swaps = swaps + statPack.getStatistics(Instrumenter.SWAPS).mean();
                     compares = compares + statPack.getStatistics(Instrumenter.COMPARES).mean();
-                    System.out.println(statPack);
                 }
 
                 double averageSwap = swaps / cycles;
@@ -334,7 +336,7 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
             for(int i=0;i<k;i++){
                 sizeOfArray[i] = (int)Math.pow(2, 7+i);
             }
-            Integer cycles = 1;
+            int cycles = 1000;
             System.out.println("Averaging across " + cycles + " runs");
             for (Integer n : sizeOfArray) {
                 double swaps = 0.0;
@@ -342,10 +344,7 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
                 for (int t = 0; t < cycles; t++) {
                     final Config config = Config.setupConfig("true", "", "", "", "");
                     final ComparisonSortHelper<Integer> helper = HelperFactory.create("quick sort", n, config);
-                    Integer[] xs = new Integer[n] ;
-                    for(int i = 0;i<n;i++){
-                        xs[i]=n-i;
-                    }
+                    final Integer[] xs = helper.random(Integer.class, r -> r.nextInt(n));
                     ShellSort<Integer> s = new ShellSort(3,helper);
                     s.init(n);
                     helper.preProcess(xs);
@@ -354,12 +353,13 @@ public class ShellSort<X extends Comparable<X>> extends SortWithHelper<X> {
                     final PrivateMethodInvoker privateMethodTester = new PrivateMethodInvoker(helper);
                     final StatPack statPack = (StatPack) privateMethodTester.invokePrivate("getStatPack");
                     swaps = swaps + statPack.getStatistics(Instrumenter.SWAPS).mean();
-                    compares = compares + statPack.getStatistics(Instrumenter.COMPARES).mean();
-                    System.out.println(statPack);
+                    if(compares <statPack.getStatistics(Instrumenter.COMPARES).mean())compares = statPack.getStatistics(Instrumenter.COMPARES).mean();
+
+                    System.out.println(statPack.getStatistics(Instrumenter.COMPARES).mean());
                 }
 
-                double averageSwap = swaps / cycles;
-                double averageCompare = compares / cycles;
+                double averageSwap = swaps/cycles ;
+                double averageCompare = compares ;
                 double ratio =  averageCompare/averageSwap ;
                 System.out.println( "-------------------------------------------------------------------------------------------------------");
                 System.out.println( "Array Size: " + n + " Avg Swap: " + averageSwap + " Avg Compare: " + averageCompare + " Ratio: " + ratio);
